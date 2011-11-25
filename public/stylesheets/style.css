@@ -1,3 +1,12 @@
-@import url("https://statics.herokuapp.com/fonts/fonts.css");
 @import url("reset.css");
 @import url("facebook.css");
+
+/* =global elements
+--------------------------------------------- */
+body {
+	font: 13px/1.5em "lucida grande" ,tahoma,verdana,arial,sans-serif;
+    color: #333;
+	background-color: #fff;
+  	width: 760px; /* 760px for canvas, 520px for page tab */
+}
+
