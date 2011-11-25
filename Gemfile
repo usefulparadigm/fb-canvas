@@ -9,6 +9,10 @@ gem 'sqlite3'
 
 gem 'koala'
 
+group :development do
+  gem 'thin'
+end
+
 # Use unicorn as the web server
 # gem 'unicorn'
 
