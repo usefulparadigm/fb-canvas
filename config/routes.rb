@@ -1,6 +1,8 @@
 FbCanvas::Application.routes.draw do
 
   root :to => "welcome#index"
+  match 'test' => "welcome#test"
+  match '*all' => "welcome#index"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

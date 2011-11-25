@@ -219,3 +219,52 @@ http://github.com/necolas/css3-facebook-buttons
 .uibutton-toolbar .uibutton-group {
     vertical-align: bottom;
 }
+
+
+
+/* Facebook Tabs 
+http://www.wjunction.com/13-tutorials-guides/19382-facebook-style-tabs.html
+*/
+
+#tabs_container {
+	margin: 0px;
+	padding: 10px 0px 0px;
+	display:block;
+	font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
+	font-size:11px;
+}
+#tabs_container ul.tabs{
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+	-webkit-padding-start: 40px;
+}
+#tabs_container .tabs li{
+	background-color: #D8DFEA;
+	float: left;
+	margin: 0px 2px 0px 0px;
+	overflow: hidden;
+	position: relative;
+}
+#tabs_container .tabs li.selected{
+	background: white;
+	margin-bottom: -2px;
+	margin-top: -2px;
+}
+#tabs_container .tabs li a{
+	border:1px solid #D8DFEA;
+	border-bottom: 0px;
+	display: block;
+	font-size: 13px;
+	font-weight: bold;
+	padding: 3px 11px;
+	white-space: nowrap;
+	color: #3B5998;
+	cursor: pointer;
+	text-decoration: none;
+}
+#tabs_container .tabs li.selected a{
+	color: #333;
+	font-size: 13px;
+	padding: 5px 10px 4px;
+}
