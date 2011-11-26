@@ -1,6 +1,6 @@
 <h1><%= @user %>, Welcome!</h1>
 
-<%= image_tag fb_profile_image_url(@user["id"]) %>
+<%= image_tag fb_profile_image_url(@user.fb_user_id) %>
 <%= link_to "Go Facebook", '#', :class => 'uibutton' %>
 
 <h3>User Info</h3>

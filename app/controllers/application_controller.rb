@@ -1,45 +1,52 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  before_filter :set_p3p_headers, :parse_signed_request
 
   protected
 
   include FacebookHelper
   helper_method :fb_graph, :current_user, :signed_in?
 
-  # TODO: https://gist.github.com/b27550ce85afc6417e05
-
-  def get_fb_session
-    unless session[:user_id]
-      @oauth ||= Koala::Facebook::OAuth.new(FB_APP_ID, FB_APP_SECRET)
-      signed_request = @oauth.parse_signed_request(params[:signed_request]) rescue {}    
-      if user_id = signed_request["user_id"]
-        @fb_graph = Koala::Facebook::API.new(signed_request["oauth_token"])
-        @fb_current_user = @fb_graph.get_object("me")
-        user = User.find_or_create_by_fb_user_id(user_id)
-        user.update_attributes(:oauth_token => signed_request["oauth_token"], :data => @fb_current_user)
-        @current_user = user
-        session[:user_id] = user.id
-      else
-        fb_redirect_to(fb_auth_url)
-        return false
-      end
-    end    
-  end     
-  
-  def fb_graph
-    @fb_graph ||= Koala::Facebook::API.new(current_user.oauth_token)
+  def set_p3p_headers
+    response.headers['P3P'] = 'CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"'
   end
 
+  def parse_signed_request
+    @oauth ||= Koala::Facebook::OAuth.new(FB_APP_ID, FB_APP_SECRET)
+    signed_request = @oauth.parse_signed_request(params[:signed_request]) rescue {}
+    if user_id = signed_request["user_id"]
+      oauth_token = signed_request["oauth_token"]
+
+      graph = Koala::Facebook::API.new(oauth_token)
+      user_data = graph.get_object('me')
+      # user_picture = graph.get_picture('me')
+
+      if @current_user = User.find_by_fb_user_id(user_id)
+        @current_user.data = user_data
+        @current_user.save!
+      else
+        @current_user = User.create!(:fb_user_id => user_id, :oauth_token => oauth_token, :data => user_data)  
+      end
+      session[:user_id] = @current_user.id
+    end  
+  end  
+
   def current_user
-    @current_user ||= User.find_by_id(session[:user_id])
+    @current_user ||= User.find(session[:user_id]) rescue nil
+  end
+  
+  def require_auth
+    unless current_user
+      fb_redirect_to(fb_auth_url)
+      return false
+    end
+  end
+
+  def fb_graph
+    @fb_graph ||= Koala::Facebook::API.new(current_user.oauth_token)
   end
 
   def signed_in?
     !!current_user
   end
-
-  # def current_user=(user)
-  #   @current_user = user
-  #   session[:user_id] = user.id
-  # end
 end

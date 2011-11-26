@@ -1,5 +1,5 @@
 class WelcomeController < ApplicationController
-  before_filter :get_fb_session
+  before_filter :require_auth
 
   def index
     @user = current_user
