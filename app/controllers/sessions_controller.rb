@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+  before_filter :require_auth
 
   # App Deauthorization
   # 
@@ -10,7 +11,8 @@ class SessionsController < ApplicationController
   # and all existing user access tokens will be automatically expired.
   
   def destroy
-    session[:user_id] = nil
+    logger.debug "callback deauthorization called!"
+    current_user.deauthorize!
     head :ok
   end
   

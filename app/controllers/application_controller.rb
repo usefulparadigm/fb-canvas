@@ -16,18 +16,22 @@ class ApplicationController < ActionController::Base
     signed_request = @oauth.parse_signed_request(params[:signed_request]) rescue {}
     if user_id = signed_request["user_id"]
       oauth_token = signed_request["oauth_token"]
+      if oauth_token
+        graph = Koala::Facebook::API.new(oauth_token)
+        user_data = graph.get_object('me')
+        # user_picture = graph.get_picture('me')
 
-      graph = Koala::Facebook::API.new(oauth_token)
-      user_data = graph.get_object('me')
-      # user_picture = graph.get_picture('me')
-
-      if @current_user = User.find_by_fb_user_id(user_id)
-        @current_user.data = user_data
-        @current_user.save!
-      else
-        @current_user = User.create!(:fb_user_id => user_id, :oauth_token => oauth_token, :data => user_data)  
-      end
-      session[:user_id] = @current_user.id
+        if @current_user = User.find_by_fb_user_id(user_id)
+          @current_user.oauth_token = oauth_token
+          @current_user.data = user_data
+          @current_user.save!
+        else
+          @current_user = User.create!(:fb_user_id => user_id, :oauth_token => oauth_token, :data => user_data)  
+        end
+        session[:user_id] = @current_user.id
+      else # maybe app was deauthorized
+        @current_user = User.find_by_fb_user_id(user_id)
+      end    
     end  
   end  
 
@@ -36,7 +40,7 @@ class ApplicationController < ActionController::Base
   end
   
   def require_auth
-    unless current_user
+    unless current_user && current_user.oauth_token.present?
       fb_redirect_to(fb_auth_url)
       return false
     end
