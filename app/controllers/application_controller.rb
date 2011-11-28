@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
           @current_user = User.create!(:fb_user_id => user_id, :oauth_token => oauth_token, :data => user_data)  
         end
         session[:user_id] = @current_user.id
-      else # maybe app was deauthorized
+      else # app deauthorized
         @current_user = User.find_by_fb_user_id(user_id)
       end    
     end  
@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
   end
   
   def require_auth
-    unless current_user && current_user.oauth_token.present?
+    unless current_user && current_user.authorized?
       session[:user_id] = nil
       fb_redirect_to(fb_auth_url)
       return false
