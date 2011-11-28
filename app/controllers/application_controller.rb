@@ -41,6 +41,7 @@ class ApplicationController < ActionController::Base
   
   def require_auth
     unless current_user && current_user.oauth_token.present?
+      session[:user_id] = nil
       fb_redirect_to(fb_auth_url)
       return false
     end
