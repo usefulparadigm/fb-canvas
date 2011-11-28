@@ -7,7 +7,8 @@ class WelcomeController < ApplicationController
   end
 
   def test
-    render :text => current_user.inspect, :layout => true
+    facebook_cookies = @oauth.get_user_info_from_cookies(cookies)
+    render :text => facebook_cookies.inspect, :layout => true
   end
 
 end

@@ -1,5 +1,7 @@
 FbCanvas::Application.routes.draw do
 
+  match '/deauthorize' => 'sessions#destroy'
+
   root :to => "welcome#index"
   match 'test' => "welcome#test"
   match '*all' => "welcome#index"
