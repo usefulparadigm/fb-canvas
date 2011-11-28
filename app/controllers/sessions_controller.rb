@@ -10,7 +10,6 @@ class SessionsController < ApplicationController
   # and all existing user access tokens will be automatically expired.
   
   def destroy
-    puts "dddddddddddddddddddddddddddddddddddddddddddd"
     session[:user_id] = nil
     head :ok
   end
