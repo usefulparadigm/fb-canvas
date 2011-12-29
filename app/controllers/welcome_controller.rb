@@ -3,6 +3,7 @@ class WelcomeController < ApplicationController
 
   def index
     @user = current_user
+    @user_picture = fb_graph.get_picture('me')
     render :action => 'home'
   end
 

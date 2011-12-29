@@ -11,7 +11,6 @@ class SessionsController < ApplicationController
   # and all existing user access tokens will be automatically expired.
   
   def destroy
-    logger.debug "callback deauthorization called!"
     current_user.deauthorize!
     head :ok
   end

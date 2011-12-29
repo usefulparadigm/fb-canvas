@@ -1,7 +1,36 @@
-<h1><%= @user %>, Welcome!</h1>
-
-<%= image_tag fb_profile_image_url(@user.fb_user_id) %>
 <%= link_to "Go Facebook", '#', :class => 'uibutton' %>
 
-<h3>User Info</h3>
-<%= debug @user %>
+Welcome! This page is just a sample. Edit this page as your will.
+
+<p>
+In Facebook, there are many ways to access user's information on the platform.
+</p>
+
+<h3>Using Server-side Library(Koala)</h3>
+
+<%= @user %>
+<%#= image_tag fb_profile_image_url(@user.fb_user_id) %>
+<%= image_tag @user_picture %>
+<%#= debug @user %>
+
+<h3>Using XFBML</h3>
+
+<div id="profile_pic">
+	<fb:profile-pic uid="100003015622767"></fb:profile-pic>
+</div>
+<div id="profile_name">
+	<fb:name uid="100003015622767" useyou="false"></fb:name>
+</div>
+
+<h3>Using JavaScript SDK</h3>
+
+<div id="profile_pic_2">
+	<img src="https://graph.facebook.com/100003015622767/picture" border="0" />
+</div>
+<div id="profile_name_2"></div>
+
+<script type="text/javascript" charset="utf-8">
+	FB.api('/100003015622767', function(response) {
+		$('#profile_name_2').html(response.name);
+	});
+</script>
