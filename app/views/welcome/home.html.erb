@@ -6,6 +6,8 @@ Welcome! This page is just a sample. Edit this page as your will.
 In Facebook, there are many ways to access user's information on the platform.
 </p>
 
+<fb:bookmark></fb:bookmark>
+
 <h3>Using Server-side Library(Koala)</h3>
 
 <%= @user %>
@@ -16,21 +18,21 @@ In Facebook, there are many ways to access user's information on the platform.
 <h3>Using XFBML</h3>
 
 <div id="profile_pic">
-	<fb:profile-pic uid="100003015622767"></fb:profile-pic>
+	<fb:profile-pic uid="<%= @user.fb_user_id %>"></fb:profile-pic>
 </div>
 <div id="profile_name">
-	<fb:name uid="100003015622767" useyou="false"></fb:name>
+	<fb:name uid="<%= @user.fb_user_id %>" useyou="false"></fb:name>
 </div>
 
 <h3>Using JavaScript SDK</h3>
 
 <div id="profile_pic_2">
-	<img src="https://graph.facebook.com/100003015622767/picture" border="0" />
+	<img src="https://graph.facebook.com/<%= @user.fb_user_id %>/picture" border="0" />
 </div>
 <div id="profile_name_2"></div>
 
 <script type="text/javascript" charset="utf-8">
-	FB.api('/100003015622767', function(response) {
+	FB.api('/<%= @user.fb_user_id %>', function(response) {
 		$('#profile_name_2').html(response.name);
 	});
 </script>

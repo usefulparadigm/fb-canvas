@@ -4,6 +4,7 @@ class WelcomeController < ApplicationController
   def index
     @user = current_user
     @user_picture = fb_graph.get_picture('me')
+    fb_graph.rest_call("dashboard.incrementCount", :uid => @user.fb_user_id)
     render :action => 'home'
   end
 
